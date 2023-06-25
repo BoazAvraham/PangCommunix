@@ -24,4 +24,9 @@ public class PlayerView : MonoBehaviour
     {
         animator.SetTrigger("Victory");
     }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnLevelCompleted -= Victory;
+    }
 }

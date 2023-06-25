@@ -20,7 +20,7 @@ public class LevelUIManager : SingletonMonobehavior<LevelUIManager>
 
     public void OnReturnToMenuClicked()
     {
-        SceneManager.LoadScene(0);
+        GameManager.Instance.BackToMainMenu();
     }
 
     public void UpdateScore(int score)

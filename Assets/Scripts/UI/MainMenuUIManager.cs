@@ -18,7 +18,7 @@ public class MainMenuUIManager : MonoBehaviour
     
     public void OnPlayClicked()
     {
-        SceneManager.LoadScene(1);
+        GameManager.Instance.StartGame();
     }
     
     

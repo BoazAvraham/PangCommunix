@@ -32,8 +32,6 @@ public class WireView : MonoBehaviour
             head.position = new Vector3(head.position.x, tipOfWire);
             yield return null;
         }
-
-        yield return new WaitForSeconds(GameManager.Instance.WireTimeOut);
         _coroutine = null;
         OnStretchEnd?.Invoke();
     }

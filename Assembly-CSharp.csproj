@@ -856,6 +856,9 @@
      <Reference Include="Unity.AI.Navigation.Updater">
      <HintPath>D:\UNITY\PROJECTS\PangCommunix\Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.Mobile.AndroidLogcat.Editor">
+     <HintPath>D:\UNITY\PROJECTS\PangCommunix\Library\ScriptAssemblies\Unity.Mobile.AndroidLogcat.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="Unity.Mathematics">
      <HintPath>D:\UNITY\PROJECTS\PangCommunix\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
      </Reference>

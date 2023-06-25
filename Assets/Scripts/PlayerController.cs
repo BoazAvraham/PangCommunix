@@ -12,9 +12,10 @@ public class PlayerController : MonoBehaviour
 
     private int shotCounter = 0;
     [SerializeField] private PlayerView playerView;
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float speed;
     void Start()
     {
+        speed = GameManager.Instance.IsMobile ? speed / 1.75f : speed; //from trial and error 
         rb = GetComponentInChildren<Rigidbody2D>();
         ballsLayer = LayerMask.NameToLayer("Balls");
         collider2D = GetComponent<Collider2D>();

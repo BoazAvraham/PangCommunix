@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -10,6 +11,7 @@ public class GameManager : SingletonMonobehavior<GameManager>
 
     //Data - should be in another class
     private bool debugMod = false;
+    private bool isMobile;
     [SerializeField] private GameObject wirePrefab;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private float minBallSize = 0.4f;
@@ -20,6 +22,7 @@ public class GameManager : SingletonMonobehavior<GameManager>
     [SerializeField] private int baseBallScore = 10;
     protected override void OnAwake()
     {
+        isMobile = Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
         DontDestroyOnLoad(gameObject);
     }
     
@@ -31,6 +34,7 @@ public class GameManager : SingletonMonobehavior<GameManager>
     private bool IsLevelScene => SceneManager.GetActiveScene().buildIndex > 0;
     public int ShotsLimit => shotsLimit;
     public event Action OnLevelCompleted;
+    public bool IsMobile => isMobile;
 
     //logic
     
@@ -44,7 +48,6 @@ public class GameManager : SingletonMonobehavior<GameManager>
     {
         var val = PlayerPrefs.GetFloat("volume");
         SoundManager.Instance.SetVolume(val);
-        lastScoreTime = -10;
     }
 
     public void GameOver()
@@ -53,7 +56,6 @@ public class GameManager : SingletonMonobehavior<GameManager>
         int highscore = PlayerPrefs.GetInt("Score");
         if (highscore < score)
             PlayerPrefs.SetInt("Score",score);
-        score = 0;
     }
 
     public void SaveVolumeSettins(float val)
@@ -67,15 +69,17 @@ public class GameManager : SingletonMonobehavior<GameManager>
     //FOR TESTING
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && debugMod && IsLevelScene)
+        if(debugMod && IsLevelScene)
         {
-            var ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
-            ball.GetComponent<Ball>().Init(4,1.5f , 0.5f, 2, Color.blue);
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            AdvanceLevel();
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+                ball.GetComponent<Ball>().Init(4,1.5f , 0.5f, 2, Color.blue);    
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                AdvanceLevel();
+            }
         }
     }
     
@@ -101,6 +105,12 @@ public class GameManager : SingletonMonobehavior<GameManager>
         LevelUIManager.Instance.UpdateScore(score);
     }
 
+    public void StartGame()
+    {
+        score = 0;
+        lastScoreTime = -10;
+        AdvanceLevel();
+    } 
     public int GetHighScore() => PlayerPrefs.GetInt("Score");
     public void RegisterBall() => ballsCount++;
     public void UnregisterBall()
@@ -112,6 +122,8 @@ public class GameManager : SingletonMonobehavior<GameManager>
             Debug.Log("balls count: " + ballsCount);
             if (ballsCount == 0)
             {
+                if (GameObject.FindWithTag("Player") == null)
+                    yield break;
                 OnLevelCompleted?.Invoke();
                 yield return new WaitForSeconds(3);
                 AdvanceLevel();
@@ -124,7 +136,7 @@ public class GameManager : SingletonMonobehavior<GameManager>
     private void AdvanceLevel()
     {
         var nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        ballsCount = 0; //here for debugging purpose
+        ballsCount = 0;
         if (SceneManager.sceneCountInBuildSettings <= nextSceneIndex)
         {
             Debug.Log("No next level");
@@ -133,6 +145,8 @@ public class GameManager : SingletonMonobehavior<GameManager>
         SceneManager.LoadScene(nextSceneIndex);
     }
 
-    
-    
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

@@ -9,7 +9,7 @@ public class InputManager : SingletonMonobehavior<InputManager>
     
     private void Start()
     {
-        isMobile = Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
+        isMobile = GameManager.Instance.IsMobile;
         Debug.Log("Running on mobile : " + isMobile);
         if (isMobile)
             LevelUIManager.Instance.InitMobileInputUI();

@@ -25,7 +25,7 @@ public class WireController : MonoBehaviour
 
     private IEnumerator OnDestroyIE()
     {
-        yield return new WaitForSeconds(GameManager.Instance.WireTimeOut);
+        yield return new WaitForSecondsRealtime(GameManager.Instance.WireTimeOut);
         Destroy(gameObject);
     }
 

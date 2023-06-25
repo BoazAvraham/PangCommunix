@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     private int ballsLayer;
     private Rigidbody2D rb;
     private Collider2D collider2D;
 
     private int shotCounter = 0;
-    
+    [SerializeField] private PlayerView playerView;
     [SerializeField] private float speed = 5f;
     void Start()
     {
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
         {
             ShootWire();
         }
+
+        playerView.UpdateView(horizontalInput);
     }
 
     private void ShootWire()

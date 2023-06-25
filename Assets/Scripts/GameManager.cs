@@ -30,14 +30,16 @@ public class GameManager : SingletonMonobehavior<GameManager>
     public GameObject GetBallPrefab() => ballPrefab;
     private bool IsLevelScene => SceneManager.GetActiveScene().buildIndex > 0;
     public int ShotsLimit => shotsLimit;
+    public event Action OnLevelCompleted;
 
-//logic
-
+    //logic
+    
     private int score;
     public int GetScore() => score;
     
     private float lastScoreTime;
     private int lastScore;
+    private int ballsCount;
     private void Start()
     {
         var val = PlayerPrefs.GetFloat("volume");
@@ -68,7 +70,12 @@ public class GameManager : SingletonMonobehavior<GameManager>
         if (Input.GetKeyDown(KeyCode.R) && debugMod && IsLevelScene)
         {
             var ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
-            ball.GetComponent<Ball>().Init(4,1.5f);
+            ball.GetComponent<Ball>().Init(4,1.5f , 0.5f, 2, Color.blue);
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            AdvanceLevel();
         }
     }
     
@@ -95,4 +102,37 @@ public class GameManager : SingletonMonobehavior<GameManager>
     }
 
     public int GetHighScore() => PlayerPrefs.GetInt("Score");
+    public void RegisterBall() => ballsCount++;
+    public void UnregisterBall()
+    {
+        IEnumerator DecreaseAndCheck()
+        {
+            ballsCount--;
+            yield return new WaitForSeconds(1);
+            Debug.Log("balls count: " + ballsCount);
+            if (ballsCount == 0)
+            {
+                OnLevelCompleted?.Invoke();
+                yield return new WaitForSeconds(3);
+                AdvanceLevel();
+            }
+        }
+
+        StartCoroutine(DecreaseAndCheck());
+    }
+
+    private void AdvanceLevel()
+    {
+        var nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        ballsCount = 0; //here for debugging purpose
+        if (SceneManager.sceneCountInBuildSettings <= nextSceneIndex)
+        {
+            Debug.Log("No next level");
+            return;
+        }
+        SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    
+    
 }

@@ -46,11 +46,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Ball.cs" />
+     <Compile Include="Assets\Flickering.cs" />
      <Compile Include="Assets\Scripts\UI\ButtonPress.cs" />
      <Compile Include="Assets\Scripts\UI\MainMenuUIManager.cs" />
      <Compile Include="Assets\Scripts\UI\LevelUIManager.cs" />
      <Compile Include="Assets\Scripts\BoundsManager.cs" />
      <Compile Include="Assets\Scripts\UI\InputManager.cs" />
+     <Compile Include="Assets\PlayerView.cs" />
      <Compile Include="Assets\Scripts\WireView.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MobileInputManager.cs" />
@@ -80,6 +82,7 @@
      <Folder Include="Assets\Sprites\pngs" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Scripts\UI" />
+     <Folder Include="Assets\Sprites\Animation" />
      <Folder Include="Assets\Sounds" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
